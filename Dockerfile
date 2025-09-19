@@ -1,22 +1,20 @@
-# Use PHP + Apache
-FROM php:8.1-apache
+# Use the official Apache image with PHP support (adjust version as needed)
+FROM php:8.2-apache
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    libzip-dev unzip git && \
-    docker-php-ext-install pdo pdo_mysql zip
-
-# Enable Apache Rewrite Module
+# Enable mod_rewrite for Apache
 RUN a2enmod rewrite
 
-# Copy project files
+# Copy your application files to the Apache web root
 COPY . /var/www/html/
 
-# Set working directory
-WORKDIR /var/www/html/
+# Set permissions (optional, depending on your needs)
+RUN chown -R www-data:www-data /var/www/html/
 
-# Install Composer
-COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
-RUN composer install
+# Update Apache config to allow .htaccess Overrides
+RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 
+# Expose port 80
 EXPOSE 80
+
+# Start Apache in the foreground
+CMD ["apache2-foreground"]

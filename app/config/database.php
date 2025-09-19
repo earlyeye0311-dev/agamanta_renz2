@@ -63,7 +63,7 @@ $database['main'] = array(
     'port'		=> '3306',
     'username'	=> 'root',
     'password'	=> '',
-    'database'	=> 'crud',
+    'database'	=> 'meow_db',
     'charset'	=> 'utf8',
     'dbprefix'	=> '',
     // Optional for SQLite
